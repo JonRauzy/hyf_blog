@@ -1,14 +1,13 @@
 package com.jon.hyf_blog.article.ArticleDTO;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-public class TagSummaryDTO {
+public class ArticleSummaryDTO {
     private Long id;
-    private String tagName;
+    private String title;
 }

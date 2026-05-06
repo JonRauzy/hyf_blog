@@ -1,5 +1,7 @@
 package com.jon.hyf_blog.article.ArticleDTO;
 
+import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
+
 import java.util.List;
 
 public record ArticleResponseDTO(

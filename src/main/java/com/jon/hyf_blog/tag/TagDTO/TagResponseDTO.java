@@ -1,6 +1,7 @@
 package com.jon.hyf_blog.tag.TagDTO;
 
 
+import com.jon.hyf_blog.article.ArticleDTO.ArticleSummaryDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

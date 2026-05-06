@@ -1,6 +1,7 @@
 package com.jon.hyf_blog.tag.TagDTO;
 
 import com.jon.hyf_blog.article.Article;
+import com.jon.hyf_blog.article.ArticleDTO.ArticleSummaryDTO;
 import com.jon.hyf_blog.tag.Tag;
 import org.springframework.stereotype.Component;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.jon.hyf_blog.tag;
 
-import com.jon.hyf_blog.article.ArticleDTO.TagSummaryDTO;
+import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagMapper;
 import com.jon.hyf_blog.tag.TagDTO.TagRequestDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagResponseDTO;
@@ -40,12 +40,13 @@ public class TagService {
         return new TagSummaryDTO(savedTag.getId(), savedTag.getTagName());
     }
 
-    public TagResponseDTO update(Long id, TagRequestDTO tagRequestDTO) {
+    public TagSummaryDTO update(Long id, TagRequestDTO tagRequestDTO) {
         Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tag not found with id: " + id));
+        System.out.println(tagRequestDTO.getTagName());
         existingTag.setTagName(tagRequestDTO.getTagName());
         Tag updatedTag = tagRepository.save(existingTag);
-        return mapper.toDto(updatedTag);
+        return new TagSummaryDTO(updatedTag.getId(), updatedTag.getTagName());
     }
 
     public void delete(Long id) {
