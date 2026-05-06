@@ -2,7 +2,8 @@ package com.jon.hyf_blog.article.ArticleDTO;
 
 import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.tag.Tag;
-import com.jon.hyf_blog.tag.TagDTO.TagResponseDTO;
+import com.jon.hyf_blog.tag.TagRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,6 +11,12 @@ import java.util.List;
 
 @Component
 public class ArticleMapper {
+
+    private final TagRepository tagRepository;
+
+    public ArticleMapper(TagRepository tagRepository) {
+        this.tagRepository = tagRepository;
+    }
 
     public ArticleResponseDTO toDto(Article article) {
         List<TagSummaryDTO> tagDtos = article.getTags()
@@ -28,19 +35,22 @@ public class ArticleMapper {
 
     public Article toEntity(ArticleRequestDTO articleRequestDTO) {
         Article article = new Article();
+        List<Tag> tags = new ArrayList<>();
+
         article.setTitle(articleRequestDTO.getTitle());
         article.setBody(articleRequestDTO.getBody());
 
-        List<Tag> tags = new ArrayList<>();
-        if (articleRequestDTO.getTagIds() != null) {
-            for (Long tagId : articleRequestDTO.getTagIds()) {
-                Tag tag = new Tag();
-                tag.setId(tagId);
-                tags.add(tag);
-            }
+        if (articleRequestDTO.getTagIds() == null) {
+            throw new RuntimeException("Tags are missing");
         }
-        article.setTags(tags);
 
+        for (Long tagId : articleRequestDTO.getTagIds()) {
+            Tag tag = tagRepository.findById(tagId)
+                    .orElseThrow(() -> new EntityNotFoundException("Tag not found with id: " + tagId));
+            tags.add(tag);
+        }
+
+        article.setTags(tags);
         return article;
     }
 }

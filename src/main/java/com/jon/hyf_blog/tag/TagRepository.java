@@ -8,4 +8,7 @@ import java.util.List;
 public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query("SELECT DISTINCT t FROM Tag t LEFT JOIN FETCH t.articles")
     List<Tag> findAllWithArticle();
+
+    @Query("SELECT DISTINCT t FROM Tag t LEFT JOIN FETCH t.articles WHERE t.id = ?1")
+    Tag findByIdWithArticle(Long id);
 }

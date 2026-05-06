@@ -1,13 +1,9 @@
 package com.jon.hyf_blog.article;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.jon.hyf_blog.article.ArticleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.ArticleDTO.ArticleResponseDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +23,21 @@ public class ArticleController {
     public ArticleResponseDTO findById(@PathVariable Long id){
         return articleService.findByIdWithTags(id);
     }
+
+    @PostMapping
+    public ArticleResponseDTO save(@RequestBody ArticleRequestDTO articleRequestDTO) {
+        return articleService.save(articleRequestDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ArticleResponseDTO update(@PathVariable Long id, @RequestBody ArticleRequestDTO articleRequestDTO) {
+        return articleService.update(id, articleRequestDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+        articleService.delete(id);
+        return "Article with id : " + id + " deleted";
+    }
+
 }

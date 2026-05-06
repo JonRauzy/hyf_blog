@@ -4,6 +4,7 @@ import com.jon.hyf_blog.article.ArticleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.ArticleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.ArticleDTO.ArticleResponseDTO;
 import com.jon.hyf_blog.tag.Tag;
+import com.jon.hyf_blog.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper mapper;
+    private final TagRepository tagRepository;
 
     public List<ArticleResponseDTO> findAll(){
         return streamDto(articleRepository.findAll());
@@ -44,8 +46,8 @@ public class ArticleService {
         List<Tag> tags = new ArrayList<>();
         if (articleRequestDTO.getTagIds() != null) {
             for (Long tagId : articleRequestDTO.getTagIds()) {
-                Tag tag = new Tag();
-                tag.setId(tagId);
+                Tag tag = tagRepository.findById(tagId)
+                        .orElseThrow(() -> new RuntimeException("No tag at id : " + tagId));
                 tags.add(tag);
             }
         }

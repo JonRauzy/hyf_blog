@@ -30,6 +30,10 @@ public class TagService {
                 .toList();
     }
 
+    public TagResponseDTO findByIdWithArticle(Long id) {
+        return mapper.toDto(tagRepository.findByIdWithArticle(id));
+    }
+
     public TagSummaryDTO save(TagRequestDTO tagRequestDTO) {
         Tag tag = mapper.toEntity(tagRequestDTO);
         Tag savedTag = tagRepository.save(tag);
