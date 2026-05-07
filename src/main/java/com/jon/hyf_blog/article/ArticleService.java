@@ -1,10 +1,13 @@
 package com.jon.hyf_blog.article;
 
-import com.jon.hyf_blog.article.ArticleDTO.ArticleMapper;
-import com.jon.hyf_blog.article.ArticleDTO.ArticleRequestDTO;
-import com.jon.hyf_blog.article.ArticleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
+import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
+import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.article.articleExeption.ArticleNotFoundExeption;
+import com.jon.hyf_blog.article.articleExeption.NoArticleExeption;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagRepository;
+import com.jon.hyf_blog.tag.tagExeption.TagNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +22,32 @@ public class ArticleService {
     private final TagRepository tagRepository;
 
     public List<ArticleResponseDTO> findAll(){
+        List<Article> articleResponseDTOS = articleRepository.findAll();
+        if(articleResponseDTOS.isEmpty()) {
+            throw new NoArticleExeption();
+        }
         return streamDto(articleRepository.findAll());
     }
 
+    public Article findById(Long id){
+        return articleRepository.findById(id)
+                 .orElseThrow(() -> new ArticleNotFoundExeption(id));
+    }
+
     public List<ArticleResponseDTO> findAllWithTags(){
-        return streamDto(articleRepository.findAllWithTags());
+        List<Article> articleResponseDTOS = articleRepository.findAllWithTags();
+        if(articleResponseDTOS.isEmpty()) {
+            throw new NoArticleExeption();
+        }
+        return streamDto(articleRepository.findAll());
     }
 
     public ArticleResponseDTO findByIdWithTags(Long id){
-        return mapper.toDto(articleRepository.findByIdWithTags(id));
+        Article articleResponseDTO = articleRepository.findByIdWithTags(id);
+        if(articleResponseDTO == null) {
+            throw new ArticleNotFoundExeption(id);
+        }
+        return mapper.toDto(articleResponseDTO);
     }
 
     public ArticleResponseDTO save(ArticleRequestDTO articleRequestDTO) {
@@ -38,7 +58,7 @@ public class ArticleService {
 
     public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO) {
         Article existingArticle = articleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+                .orElseThrow(() -> new ArticleNotFoundExeption(id));
 
         existingArticle.setTitle(articleRequestDTO.getTitle());
         existingArticle.setBody(articleRequestDTO.getBody());
@@ -47,7 +67,7 @@ public class ArticleService {
         if (articleRequestDTO.getTagIds() != null) {
             for (Long tagId : articleRequestDTO.getTagIds()) {
                 Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new RuntimeException("No tag at id : " + tagId));
+                        .orElseThrow(() -> new TagNotFoundExeption(tagId));
                 tags.add(tag);
             }
         }
@@ -58,7 +78,9 @@ public class ArticleService {
     }
 
     public void delete(Long id) {
-        articleRepository.deleteById(id);
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ArticleNotFoundExeption(id));
+        articleRepository.deleteById(article.getId());
     }
 
     private List<ArticleResponseDTO> streamDto(List<Article> articleList) {

@@ -1,7 +1,7 @@
 package com.jon.hyf_blog.article;
 
-import com.jon.hyf_blog.article.ArticleDTO.ArticleRequestDTO;
-import com.jon.hyf_blog.article.ArticleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
+import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +39,4 @@ public class ArticleController {
         articleService.delete(id);
         return "Article with id : " + id + " deleted";
     }
-
 }

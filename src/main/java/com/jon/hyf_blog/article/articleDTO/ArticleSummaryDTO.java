@@ -1,4 +1,4 @@
-package com.jon.hyf_blog.article.ArticleDTO;
+package com.jon.hyf_blog.article.articleDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
