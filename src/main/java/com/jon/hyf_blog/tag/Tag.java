@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jon.hyf_blog.article.Article;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class Tag {
     private Long id;
 
     @Column(name = "tag_name")
+    @NotBlank
     private String tagName;
 
     @ManyToMany(mappedBy = "tags")

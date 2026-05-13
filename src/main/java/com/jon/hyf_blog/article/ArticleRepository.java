@@ -11,5 +11,4 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     @Query("SELECT DISTINCT a FROM Article a LEFT JOIN FETCH a.tags WHERE a.id = ?1")
     Article findByIdWithTags(Long id);
-
 }

@@ -15,7 +15,8 @@ public class TagMapper {
         dto.setId(tag.getId());
         dto.setTagName(tag.getTagName());
 
-        List<ArticleSummaryDTO> articleSummaries = tag.getArticles().stream()
+        List<ArticleSummaryDTO> articleSummaries = tag.getArticles()
+                .stream()
                 .map(this::toArticleSummaryDto)
                 .collect(Collectors.toList());
         dto.setArticles(articleSummaries);
@@ -23,7 +24,7 @@ public class TagMapper {
         return dto;
     }
 
-    private ArticleSummaryDTO toArticleSummaryDto(Article article) {
+    public ArticleSummaryDTO toArticleSummaryDto(Article article) {
         ArticleSummaryDTO summary = new ArticleSummaryDTO(article.getId(), article.getTitle());
         summary.setId(article.getId());
         summary.setTitle(article.getTitle());

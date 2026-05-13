@@ -4,6 +4,8 @@ import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.tag.TagRepository;
+import com.jon.hyf_blog.tag.tagExeption.NoTagExeption;
+import com.jon.hyf_blog.tag.tagExeption.TagNotFoundExeption;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -42,12 +44,12 @@ public class ArticleMapper {
         article.setBody(articleRequestDTO.getBody());
 
         if (articleRequestDTO.getTagIds() == null) {
-            throw new RuntimeException("Tags are missing");
+            throw new NoTagExeption();
         }
 
         for (Long tagId : articleRequestDTO.getTagIds()) {
             Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new EntityNotFoundException("Tag not found with id: " + tagId));
+                    .orElseThrow(() -> new TagNotFoundExeption(tagId));
             tags.add(tag);
         }
 

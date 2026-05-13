@@ -39,8 +39,7 @@ public class TagService {
             throw new NoTagExeption();
         }
 
-        return tags
-                .stream()
+        return tags.stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -64,7 +63,6 @@ public class TagService {
     public TagSummaryDTO update(Long id, TagRequestDTO tagRequestDTO) {
         Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new TagNotFoundExeption(id));
-        System.out.println(tagRequestDTO.getTagName());
         existingTag.setTagName(tagRequestDTO.getTagName());
         Tag updatedTag = tagRepository.save(existingTag);
         return new TagSummaryDTO(updatedTag.getId(), updatedTag.getTagName());

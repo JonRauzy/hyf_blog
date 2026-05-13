@@ -2,6 +2,7 @@ package com.jon.hyf_blog.article;
 
 import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,12 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ArticleResponseDTO save(@RequestBody ArticleRequestDTO articleRequestDTO) {
+    public ArticleResponseDTO save(@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
         return articleService.save(articleRequestDTO);
     }
 
     @PutMapping("/{id}")
-    public ArticleResponseDTO update(@PathVariable Long id, @RequestBody ArticleRequestDTO articleRequestDTO) {
+    public ArticleResponseDTO update(@PathVariable Long id,@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
         return articleService.update(id, articleRequestDTO);
     }
 
