@@ -39,7 +39,6 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setUserName(user.getUserName());
         dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
         dto.setRole(user.getRole());
 
         List<ArticleSummaryDTO> articleSummaries = user.getArticles()
@@ -49,7 +48,6 @@ public class UserMapper {
         dto.setArticles(articleSummaries);
 
         return dto;
-
     }
 
 }

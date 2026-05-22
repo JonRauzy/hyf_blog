@@ -1,6 +1,8 @@
 package com.jon.hyf_blog.user;
 
 import com.jon.hyf_blog.user.userDTO.*;
+import com.jon.hyf_blog.user.userExeption.UserExist;
+import com.jon.hyf_blog.user.userExeption.UserNotFoundExeption;
 import com.jon.hyf_blog.util.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,9 +36,16 @@ public class UserService {
                 .toList();
     }
 
+    public UserSummaryDTO findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundExeption(id));
+
+        return mapper.toSummaryDTO(user);
+    }
+
     public UserSummaryDTO register(RegisterRequestDTO registerRequestDTO) {
         if(userRepository.existsByEmail(registerRequestDTO.getEmail())){
-            throw new RuntimeException("User exist with " + registerRequestDTO.getEmail());
+            throw new UserExist("User already exist");
         }
 
         String hashedPassword = passwordEncoder.encode(registerRequestDTO.getPassword());
@@ -58,10 +67,7 @@ public class UserService {
                 "role", user.getRole()
         );
 
-        //call JwtUtils to generate a JWTToken
         String token = jwtUtils.generateToken(user.getEmail(), claims);
-
-        //return the user the token
         return new LoginResponseDTO(token);
     }
 }

@@ -15,4 +15,5 @@ public class ArticleRequestDTO {
     private String title;
     private String body;
     private List<Long> tagIds;
+    private Long userId;    
 }

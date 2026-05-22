@@ -8,6 +8,9 @@ import com.jon.hyf_blog.article.articleExeption.NoArticleExeption;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagRepository;
 import com.jon.hyf_blog.tag.tagExeption.TagNotFoundExeption;
+import com.jon.hyf_blog.user.User;
+import com.jon.hyf_blog.user.UserRepository;
+import com.jon.hyf_blog.user.userExeption.UserNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper mapper;
     private final TagRepository tagRepository;
+    private final UserRepository userRepository;
 
     public List<ArticleResponseDTO> findAll(){
         List<Article> articleResponseDTOS = articleRepository.findAll();
@@ -72,6 +76,10 @@ public class ArticleService {
             }
         }
         existingArticle.setTags(tags);
+
+        User user = userRepository.findById(articleRequestDTO.getUserId())
+                .orElseThrow(() -> new UserNotFoundExeption(articleRequestDTO.getUserId()));
+        existingArticle.setUser(user);
 
         Article updatedArticle = articleRepository.save(existingArticle);
         return mapper.toDto(updatedArticle);

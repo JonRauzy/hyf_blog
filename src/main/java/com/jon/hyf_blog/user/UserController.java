@@ -25,6 +25,11 @@ public class UserController {
         return userService.findAllWithArticles();
     }
 
+    @GetMapping("/{id}")
+    public UserSummaryDTO findById(@PathVariable Long id){
+        return userService.findById(id);
+    }
+
     @PostMapping("/register")
     public UserSummaryDTO register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
         return userService.register(registerRequestDTO);

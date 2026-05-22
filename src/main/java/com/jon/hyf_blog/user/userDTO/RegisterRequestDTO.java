@@ -13,7 +13,6 @@ public class RegisterRequestDTO {
     @NotBlank(message = "userNameMissing")
     private String userName;
 
-
     @NotBlank(message = "emailMissing")
     @Email(message = "notAnEmail")
     private String email;

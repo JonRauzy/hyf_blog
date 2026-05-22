@@ -42,14 +42,25 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()  //TODO make it admin or user
                         .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/articles").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/articles/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/articles/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/tags").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/tags/with-articles").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/tags/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/tags/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/tags/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/tags/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/tags/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()   //you dont have to be admin but you need to be a user
-
                     )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
