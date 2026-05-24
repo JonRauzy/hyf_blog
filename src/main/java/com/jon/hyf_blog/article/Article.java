@@ -2,6 +2,7 @@ package com.jon.hyf_blog.article;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.jon.hyf_blog.comment.Comment;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.user.User;
 import jakarta.persistence.*;
@@ -38,4 +39,7 @@ public class Article {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article")
+    private List<Comment> comments = new ArrayList<>();
 }

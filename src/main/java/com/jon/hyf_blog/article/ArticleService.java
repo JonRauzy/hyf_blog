@@ -43,7 +43,7 @@ public class ArticleService {
         if(articleResponseDTOS.isEmpty()) {
             throw new NoArticleExeption();
         }
-        return streamDto(articleRepository.findAll());
+        return streamDto(articleResponseDTOS);
     }
 
     public ArticleResponseDTO findByIdWithTags(Long id){

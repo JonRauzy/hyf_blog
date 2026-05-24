@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
-    @Query("SELECT DISTINCT t FROM Tag t LEFT JOIN FETCH t.articles")
+    @Query("SELECT DISTINCT t FROM Tag t LEFT JOIN FETCH t.articles a LEFT JOIN FETCH a.user")
     List<Tag> findAllWithArticle();
 
     @Query("SELECT DISTINCT t FROM Tag t LEFT JOIN FETCH t.articles WHERE t.id = ?1")

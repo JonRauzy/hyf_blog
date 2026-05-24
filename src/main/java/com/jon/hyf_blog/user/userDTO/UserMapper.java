@@ -1,5 +1,6 @@
 package com.jon.hyf_blog.user.userDTO;
 
+import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagMapper;
 import com.jon.hyf_blog.user.User;
@@ -10,9 +11,11 @@ import java.util.List;
 @Component
 public class UserMapper {
     private final TagMapper tagMapper;
+    private final ArticleMapper articleMapper;
 
-    public UserMapper(TagMapper tagMapper) {
+    public UserMapper(TagMapper tagMapper, ArticleMapper articleMapper) {
         this.tagMapper = tagMapper;
+        this.articleMapper = articleMapper;
     }
 
     public User toEntity(RegisterRequestDTO registerRequestDTO) {
@@ -43,7 +46,7 @@ public class UserMapper {
 
         List<ArticleSummaryDTO> articleSummaries = user.getArticles()
                 .stream()
-                .map(tagMapper::toArticleSummaryDto)
+                .map(articleMapper::toArticleSummaryDto)
                 .toList();
         dto.setArticles(articleSummaries);
 

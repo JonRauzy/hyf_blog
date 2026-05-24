@@ -29,7 +29,8 @@ public class ArticleMapper {
                 .map(tag -> new TagSummaryDTO(tag.getId(), tag.getTagName()))
                 .toList();
 
-        UserSummaryDTO user = new UserSummaryDTO(
+        User user = article.getUser();
+        UserSummaryDTO userSummaryDTO = new UserSummaryDTO(
                 article.getUser().getId(),
                 article.getUser().getUserName(),
                 article.getUser().getRole()
@@ -39,11 +40,17 @@ public class ArticleMapper {
                 article.getId(),
                 article.getTitle(),
                 article.getBody(),
-                user,
+                userSummaryDTO,
                 tagDtos
         );
     }
 
+    public ArticleSummaryDTO toArticleSummaryDto(Article article) {
+        ArticleSummaryDTO summary = new ArticleSummaryDTO(article.getId(), article.getTitle());
+        summary.setId(article.getId());
+        summary.setTitle(article.getTitle());
+        return summary;
+    }
 
     public Article toEntity(ArticleRequestDTO articleRequestDTO) {
         Article article = new Article();

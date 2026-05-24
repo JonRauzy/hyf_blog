@@ -1,14 +1,18 @@
 package com.jon.hyf_blog.tag.TagDTO;
 
-import com.jon.hyf_blog.article.Article;
+import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
 import com.jon.hyf_blog.tag.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class TagMapper {
+
+    private final ArticleMapper articleMapper;
 
     public TagResponseDTO toDto(Tag tag) {
         TagResponseDTO dto = new TagResponseDTO();
@@ -17,18 +21,11 @@ public class TagMapper {
 
         List<ArticleSummaryDTO> articleSummaries = tag.getArticles()
                 .stream()
-                .map(this::toArticleSummaryDto)
-                .collect(Collectors.toList());
+                .map(articleMapper::toArticleSummaryDto)
+                .toList();
         dto.setArticles(articleSummaries);
 
         return dto;
-    }
-
-    public ArticleSummaryDTO toArticleSummaryDto(Article article) {
-        ArticleSummaryDTO summary = new ArticleSummaryDTO(article.getId(), article.getTitle());
-        summary.setId(article.getId());
-        summary.setTitle(article.getTitle());
-        return summary;
     }
 
     public Tag toEntity(TagRequestDTO tagRequestDTO) {
