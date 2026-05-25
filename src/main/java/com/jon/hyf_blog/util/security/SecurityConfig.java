@@ -40,12 +40,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                     auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()  //TODO make it admin or user
+                        .requestMatchers("/swagger-ui/**").hasAuthority("ADMIN") //TODO make it admin or user
                         .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles/{id}").permitAll()
@@ -60,7 +60,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/tags/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/tags/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/tags/**").hasAuthority("ADMIN")
-                        .anyRequest().authenticated()   //you dont have to be admin but you need to be a user
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comments/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/comments/**").authenticated()
                     )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
