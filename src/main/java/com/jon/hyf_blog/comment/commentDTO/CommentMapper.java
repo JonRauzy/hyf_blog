@@ -4,12 +4,11 @@ import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.article.ArticleRepository;
 import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
-import com.jon.hyf_blog.article.articleExeption.ArticleNotFoundExeption;
 import com.jon.hyf_blog.comment.Comment;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
-import com.jon.hyf_blog.user.userExeption.UserNotFoundExeption;
+import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -56,9 +55,9 @@ public class CommentMapper {
         Long userId = commentRequestDTO.getUserId();
 
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new ArticleNotFoundExeption(articleId));
+                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, articleId));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundExeption(userId));
+                .orElseThrow(() -> new RessourceNotFoundExeption(User.class, userId));
 
         comment.setBody(commentRequestDTO.getBody());
         comment.setArticle(article);

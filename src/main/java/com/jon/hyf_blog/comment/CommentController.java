@@ -3,6 +3,7 @@ package com.jon.hyf_blog.comment;
 import com.jon.hyf_blog.comment.commentDTO.CommentResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,5 +18,10 @@ public class CommentController {
     @GetMapping
     public List<CommentResponseDTO> findAll(){
         return commentService.findAllWithArticleAndUser();
+    }
+
+    @GetMapping("/{id}")
+    public CommentResponseDTO findById(@PathVariable Long id) {
+        return commentService.findById(id);
     }
 }

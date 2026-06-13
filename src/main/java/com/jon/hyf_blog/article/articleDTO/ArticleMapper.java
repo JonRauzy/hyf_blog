@@ -4,12 +4,11 @@ import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.tag.TagRepository;
-import com.jon.hyf_blog.tag.tagExeption.NoTagExeption;
-import com.jon.hyf_blog.tag.tagExeption.TagNotFoundExeption;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
-import jakarta.persistence.EntityNotFoundException;
+import com.jon.hyf_blog.util.exceptionHandler.NoRessourceExeption;
+import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -63,12 +62,12 @@ public class ArticleMapper {
         article.setUser(user);
 
         if (articleRequestDTO.getTagIds() == null) {
-            throw new NoTagExeption();
+            throw new NoRessourceExeption(Tag.class);
         }
 
         for (Long tagId : articleRequestDTO.getTagIds()) {
             Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new TagNotFoundExeption(tagId));
+                    .orElseThrow(() -> new RessourceNotFoundExeption(Tag.class, tagId));
             tags.add(tag);
         }
 

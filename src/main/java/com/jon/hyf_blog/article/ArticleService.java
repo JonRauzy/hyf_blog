@@ -3,14 +3,12 @@ package com.jon.hyf_blog.article;
 import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
-import com.jon.hyf_blog.article.articleExeption.ArticleNotFoundExeption;
-import com.jon.hyf_blog.article.articleExeption.NoArticleExeption;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagRepository;
-import com.jon.hyf_blog.tag.tagExeption.TagNotFoundExeption;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
-import com.jon.hyf_blog.user.userExeption.UserNotFoundExeption;
+import com.jon.hyf_blog.util.exceptionHandler.NoRessourceExeption;
+import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +26,20 @@ public class ArticleService {
     public List<ArticleResponseDTO> findAll(){
         List<Article> articleResponseDTOS = articleRepository.findAll();
         if(articleResponseDTOS.isEmpty()) {
-            throw new NoArticleExeption();
+            throw new NoRessourceExeption(Article.class);
         }
         return streamDto(articleRepository.findAll());
     }
 
     public Article findById(Long id){
         return articleRepository.findById(id)
-                 .orElseThrow(() -> new ArticleNotFoundExeption(id));
+                 .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
     }
 
     public List<ArticleResponseDTO> findAllWithTags(){
         List<Article> articleResponseDTOS = articleRepository.findAllWithTags();
         if(articleResponseDTOS.isEmpty()) {
-            throw new NoArticleExeption();
+            throw new NoRessourceExeption(Article.class);
         }
         return streamDto(articleResponseDTOS);
     }
@@ -49,7 +47,7 @@ public class ArticleService {
     public ArticleResponseDTO findByIdWithTags(Long id){
         Article articleResponseDTO = articleRepository.findByIdWithTags(id);
         if(articleResponseDTO == null) {
-            throw new ArticleNotFoundExeption(id);
+            throw new RessourceNotFoundExeption(Article.class, id);
         }
         return mapper.toDto(articleResponseDTO);
     }
@@ -62,7 +60,7 @@ public class ArticleService {
 
     public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO) {
         Article existingArticle = articleRepository.findById(id)
-                .orElseThrow(() -> new ArticleNotFoundExeption(id));
+                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
 
         existingArticle.setTitle(articleRequestDTO.getTitle());
         existingArticle.setBody(articleRequestDTO.getBody());
@@ -71,14 +69,14 @@ public class ArticleService {
         if (articleRequestDTO.getTagIds() != null) {
             for (Long tagId : articleRequestDTO.getTagIds()) {
                 Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new TagNotFoundExeption(tagId));
+                        .orElseThrow(() -> new RessourceNotFoundExeption(Tag.class, tagId));
                 tags.add(tag);
             }
         }
         existingArticle.setTags(tags);
 
         User user = userRepository.findById(articleRequestDTO.getUserId())
-                .orElseThrow(() -> new UserNotFoundExeption(articleRequestDTO.getUserId()));
+                .orElseThrow(() -> new RessourceNotFoundExeption(User.class, articleRequestDTO.getUserId()));
         existingArticle.setUser(user);
 
         Article updatedArticle = articleRepository.save(existingArticle);
@@ -87,7 +85,7 @@ public class ArticleService {
 
     public void delete(Long id) {
         Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new ArticleNotFoundExeption(id));
+                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
         articleRepository.deleteById(article.getId());
     }
 
