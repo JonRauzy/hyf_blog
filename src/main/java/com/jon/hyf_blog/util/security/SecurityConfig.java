@@ -1,6 +1,5 @@
 package com.jon.hyf_blog.util.security;
 
-
 import com.jon.hyf_blog.util.filters.JwtAuthenticationFilter;
 import com.jon.hyf_blog.util.filters.LoggingFilter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+// TODO : JWT js script in PostMan to keep token in memory
 
 @Configuration
 @EnableWebSecurity  // This annotation is for enabling Spring Security's web security support and provides the Spring MVC integration.
@@ -48,11 +49,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/articles").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                         .requestMatchers(HttpMethod.GET, "/api/v1/articles/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/articles/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{id}").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/with-articles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/{id}").permitAll()

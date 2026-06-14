@@ -1,6 +1,7 @@
 package com.jon.hyf_blog.article.articleDTO;
 
 import com.jon.hyf_blog.article.Article;
+import com.jon.hyf_blog.comment.commentDTO.CommentSummaryDTO;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.tag.TagRepository;
@@ -13,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -29,18 +32,27 @@ public class ArticleMapper {
                 .toList();
 
         User user = article.getUser();
-        UserSummaryDTO userSummaryDTO = new UserSummaryDTO(
+        UserSummaryDTO userDTO = new UserSummaryDTO(
                 article.getUser().getId(),
                 article.getUser().getUserName(),
                 article.getUser().getRole()
         );
 
+        List<CommentSummaryDTO> commentDTO = article.getComments()
+                .stream()
+                .map(comment -> new CommentSummaryDTO(
+                        comment.getId(),
+                        comment.getBody(),
+                        comment.getUser().getUserName()))
+                .toList();
+
         return new ArticleResponseDTO(
                 article.getId(),
                 article.getTitle(),
                 article.getBody(),
-                userSummaryDTO,
-                tagDtos
+                userDTO,
+                tagDtos,
+                commentDTO
         );
     }
 
@@ -53,7 +65,7 @@ public class ArticleMapper {
 
     public Article toEntity(ArticleRequestDTO articleRequestDTO) {
         Article article = new Article();
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
         User user = userRepository.findById(articleRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("No user id : " + articleRequestDTO.getUserId()));
 

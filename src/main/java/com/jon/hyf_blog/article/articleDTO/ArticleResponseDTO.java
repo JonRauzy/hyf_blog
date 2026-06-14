@@ -1,5 +1,6 @@
 package com.jon.hyf_blog.article.articleDTO;
 
+import com.jon.hyf_blog.comment.commentDTO.CommentSummaryDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
 import lombok.AllArgsConstructor;
@@ -19,4 +20,5 @@ public class ArticleResponseDTO{
     private String body;
     private UserSummaryDTO user;
     private List<TagSummaryDTO> tags;
+    private List<CommentSummaryDTO> comments;
 }

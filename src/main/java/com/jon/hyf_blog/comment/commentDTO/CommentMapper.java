@@ -45,7 +45,8 @@ public class CommentMapper {
     public CommentSummaryDTO toSummaryDto(Comment comment) {
         return new CommentSummaryDTO(
                 comment.getId(),
-                comment.getBody()
+                comment.getBody(),
+                comment.getUser().getUserName()
         );
     }
 

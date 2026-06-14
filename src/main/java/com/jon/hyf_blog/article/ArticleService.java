@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,16 +26,11 @@ public class ArticleService {
     private final UserRepository userRepository;
 
     public List<ArticleResponseDTO> findAll(){
-        List<Article> articleResponseDTOS = articleRepository.findAll();
+        List<Article> articleResponseDTOS = articleRepository.findAllWithAll();
         if(articleResponseDTOS.isEmpty()) {
             throw new NoRessourceExeption(Article.class);
         }
-        return streamDto(articleRepository.findAll());
-    }
-
-    public Article findById(Long id){
-        return articleRepository.findById(id)
-                 .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
+        return streamDto(articleResponseDTOS);
     }
 
     public List<ArticleResponseDTO> findAllWithTags(){
@@ -42,6 +39,19 @@ public class ArticleService {
             throw new NoRessourceExeption(Article.class);
         }
         return streamDto(articleResponseDTOS);
+    }
+
+    public List<ArticleResponseDTO> findAllWithComments() {
+        List<Article> articleResponseDTOS = articleRepository.findAllWithComments();
+        if(articleResponseDTOS.isEmpty()) {
+            throw new NoRessourceExeption(Article.class);
+        }
+        return streamDto(articleResponseDTOS);
+    }
+
+    public Article findById(Long id){
+        return articleRepository.findById(id)
+                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
     }
 
     public ArticleResponseDTO findByIdWithTags(Long id){
@@ -65,7 +75,7 @@ public class ArticleService {
         existingArticle.setTitle(articleRequestDTO.getTitle());
         existingArticle.setBody(articleRequestDTO.getBody());
 
-        List<Tag> tags = new ArrayList<>();
+        Set<Tag> tags = new HashSet<>();
         if (articleRequestDTO.getTagIds() != null) {
             for (Long tagId : articleRequestDTO.getTagIds()) {
                 Tag tag = tagRepository.findById(tagId)

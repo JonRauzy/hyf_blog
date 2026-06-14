@@ -18,7 +18,7 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleResponseDTO> findAll(){
-        return articleService.findAllWithTags();
+        return articleService.findAll();
     }
 
     @GetMapping("/{id}")
