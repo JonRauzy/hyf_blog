@@ -1,7 +1,5 @@
 package com.jon.hyf_blog.article;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jon.hyf_blog.comment.Comment;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.user.User;
@@ -9,16 +7,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

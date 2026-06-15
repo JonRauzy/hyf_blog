@@ -4,7 +4,6 @@ import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

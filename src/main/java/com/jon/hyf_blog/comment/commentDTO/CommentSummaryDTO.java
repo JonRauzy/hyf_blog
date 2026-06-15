@@ -1,6 +1,5 @@
 package com.jon.hyf_blog.comment.commentDTO;
 
-import com.jon.hyf_blog.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

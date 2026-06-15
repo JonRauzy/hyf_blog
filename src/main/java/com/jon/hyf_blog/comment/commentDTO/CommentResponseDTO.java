@@ -1,6 +1,5 @@
 package com.jon.hyf_blog.comment.commentDTO;
 
-import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
 import lombok.AllArgsConstructor;
