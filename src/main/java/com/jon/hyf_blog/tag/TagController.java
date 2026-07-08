@@ -3,6 +3,7 @@ package com.jon.hyf_blog.tag;
 import com.jon.hyf_blog.tag.TagDTO.TagRequestDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagResponseDTO;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,15 @@ public class TagController {
     }
 
     @PostMapping
-    public TagSummaryDTO save(@RequestBody TagRequestDTO tagRequestDTO){
+    public TagSummaryDTO save(@Valid @RequestBody TagRequestDTO tagRequestDTO){
         return tagService.save(tagRequestDTO);
     }
 
     @PutMapping("/{id}")
-    public TagSummaryDTO update(@PathVariable Long id, @RequestBody TagRequestDTO tagRequestDTO) {
+    public TagSummaryDTO update(
+            @PathVariable Long id,
+            @Valid @RequestBody TagRequestDTO tagRequestDTO
+    ) {
         return tagService.update(id, tagRequestDTO);
     }
 

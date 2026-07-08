@@ -7,6 +7,7 @@ import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
 import com.jon.hyf_blog.comment.Comment;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
+import com.jon.hyf_blog.user.userDTO.UserMapper;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
 import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommentMapper {
     private final UserRepository userRepository;
-    private final ArticleMapper articleMapper;
+    private final UserMapper userMapper;
     private final ArticleRepository articleRepository;
+    private final ArticleMapper articleMapper;
 
     public CommentResponseDTO toDto(Comment comment) {
         User user = comment.getUser();
@@ -27,11 +29,7 @@ public class CommentMapper {
                 user.getRole()
         );
 
-        Article article = comment.getArticle();
-        ArticleSummaryDTO articleSummaryDTO = new ArticleSummaryDTO(
-                article.getId(),
-                article.getTitle()
-        );
+        ArticleSummaryDTO articleSummaryDTO = articleMapper.toArticleSummaryDto(comment.getArticle());
 
         return new CommentResponseDTO(
                 comment.getId(),
@@ -43,22 +41,27 @@ public class CommentMapper {
     }
 
     public CommentSummaryDTO toSummaryDto(Comment comment) {
+        UserSummaryDTO userSummaryDTO = userMapper.toSummaryDTO(comment.getUser());
+        ArticleSummaryDTO articleSummaryDTO = articleMapper.toArticleSummaryDto(comment.getArticle());
+
         return new CommentSummaryDTO(
                 comment.getId(),
                 comment.getBody(),
-                comment.getUser().getUserName()
+                articleSummaryDTO,
+                userSummaryDTO
         );
     }
 
     public Comment toEntity(CommentRequestDTO commentRequestDTO) {
         Comment comment = new Comment();
         Long articleId = commentRequestDTO.getArticleId();
-        Long userId = commentRequestDTO.getUserId();
+        User user = commentRequestDTO.getUser();
 
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, articleId));
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RessourceNotFoundExeption(User.class, userId));
+        if(user == null) {
+            throw new RessourceNotFoundExeption(User.class, 0L);
+        }
 
         comment.setBody(commentRequestDTO.getBody());
         comment.setArticle(article);

@@ -40,9 +40,19 @@ public class ArticleMapper {
         List<CommentSummaryDTO> commentDTO = article.getComments()
                 .stream()
                 .map(comment -> new CommentSummaryDTO(
-                        comment.getId(),
-                        comment.getBody(),
-                        comment.getUser().getUserName()))
+                                        comment.getId(),
+                                        comment.getBody(),
+                        new ArticleSummaryDTO(
+                                                comment.getArticle().getId(),
+                                                comment.getArticle().getTitle()
+                                        ),
+                        new UserSummaryDTO(
+                                                comment.getUser().getId(),
+                                                comment.getUser().getUserName(),
+                                                comment.getUser().getRole()
+                                        )
+                                    )
+                )
                 .toList();
 
         return new ArticleResponseDTO(
@@ -65,12 +75,9 @@ public class ArticleMapper {
     public Article toEntity(ArticleRequestDTO articleRequestDTO) {
         Article article = new Article();
         Set<Tag> tags = new HashSet<>();
-        User user = userRepository.findById(articleRequestDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("No user id : " + articleRequestDTO.getUserId()));
 
         article.setTitle(articleRequestDTO.getTitle());
         article.setBody(articleRequestDTO.getBody());
-        article.setUser(user);
 
         if (articleRequestDTO.getTagIds() == null) {
             throw new NoRessourceExeption(Tag.class);

@@ -2,11 +2,14 @@ package com.jon.hyf_blog.article;
 
 import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
 import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/articles")
@@ -26,13 +29,20 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ArticleResponseDTO save(@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
-        return articleService.save(articleRequestDTO);
+    public ArticleResponseDTO save(
+            @Valid @RequestBody ArticleRequestDTO articleRequestDTO,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return articleService.save(articleRequestDTO, currentUser);
     }
 
     @PutMapping("/{id}")
-    public ArticleResponseDTO update(@PathVariable Long id,@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
-        return articleService.update(id, articleRequestDTO);
+    public ArticleResponseDTO update(
+            @PathVariable Long id,
+            @Valid @RequestBody ArticleRequestDTO articleRequestDTO,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return articleService.update(id, articleRequestDTO, currentUser);
     }
 
     @DeleteMapping("/{id}")

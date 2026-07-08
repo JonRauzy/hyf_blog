@@ -10,7 +10,9 @@ import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.util.exceptionHandler.NoRessourceExeption;
 import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final ArticleMapper mapper;
+    private final ArticleMapper articleMapper;
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
 
@@ -58,21 +60,19 @@ public class ArticleService {
         if(articleResponseDTO == null) {
             throw new RessourceNotFoundExeption(Article.class, id);
         }
-        return mapper.toDto(articleResponseDTO);
+        return articleMapper.toDto(articleResponseDTO);
     }
 
-    public ArticleResponseDTO save(ArticleRequestDTO articleRequestDTO) {
-        Article article = mapper.toEntity(articleRequestDTO);
+    public ArticleResponseDTO save(ArticleRequestDTO articleRequestDTO, User currentUser) {
+        Article article = articleMapper.toEntity(articleRequestDTO);
+        article.setUser(currentUser);
         Article savedArticle = articleRepository.save(article);
-        return mapper.toDto(savedArticle);
+        return articleMapper.toDto(savedArticle);
     }
 
-    public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO) {
+    public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO, User currentUser) {
         Article existingArticle = articleRepository.findById(id)
                 .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
-
-        existingArticle.setTitle(articleRequestDTO.getTitle());
-        existingArticle.setBody(articleRequestDTO.getBody());
 
         Set<Tag> tags = new HashSet<>();
         if (articleRequestDTO.getTagIds() != null) {
@@ -82,14 +82,20 @@ public class ArticleService {
                 tags.add(tag);
             }
         }
+
+        if(!existingArticle.getUser().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "You can only edit your own article"
+            );
+        }
+
+        existingArticle.setTitle(articleRequestDTO.getTitle());
+        existingArticle.setBody(articleRequestDTO.getBody());
         existingArticle.setTags(tags);
 
-        User user = userRepository.findById(articleRequestDTO.getUserId())
-                .orElseThrow(() -> new RessourceNotFoundExeption(User.class, articleRequestDTO.getUserId()));
-        existingArticle.setUser(user);
-
         Article updatedArticle = articleRepository.save(existingArticle);
-        return mapper.toDto(updatedArticle);
+        return articleMapper.toDto(updatedArticle);
     }
 
     public void delete(Long id) {
@@ -101,7 +107,7 @@ public class ArticleService {
     private List<ArticleResponseDTO> streamDto(List<Article> articleList) {
         return articleList
                 .stream()
-                .map(mapper::toDto)
+                .map(articleMapper::toDto)
                 .toList();
     }
 }

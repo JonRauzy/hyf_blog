@@ -1,14 +1,13 @@
 package com.jon.hyf_blog.tag.TagDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class TagRequestDTO {
+    @NotBlank
     private String tagName;
 }

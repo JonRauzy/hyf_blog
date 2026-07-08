@@ -59,8 +59,10 @@ public class TagService {
     public TagSummaryDTO update(Long id, TagRequestDTO tagRequestDTO) {
         Tag existingTag = tagRepository.findById(id)
                 .orElseThrow(() -> new RessourceNotFoundExeption(Tag.class, id));
+
         existingTag.setTagName(tagRequestDTO.getTagName());
         Tag updatedTag = tagRepository.save(existingTag);
+
         return new TagSummaryDTO(updatedTag.getId(), updatedTag.getTagName());
     }
 

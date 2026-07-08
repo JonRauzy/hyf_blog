@@ -48,7 +48,8 @@ public class JwtUtils {
                 .compact();
     }
 
-    public boolean isValid(String token) {  //we may have to handle exceptions because of parsing
+    public boolean isValid(String token) {
+        //we may have to handle exceptions because of parsing
         Date tokenExpiration = parse(token).getBody().getExpiration();
         return tokenExpiration.after(new Date());
     }

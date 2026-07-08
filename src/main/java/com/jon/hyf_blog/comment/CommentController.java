@@ -1,11 +1,13 @@
 package com.jon.hyf_blog.comment;
 
+import com.jon.hyf_blog.comment.commentDTO.CommentRequestDTO;
 import com.jon.hyf_blog.comment.commentDTO.CommentResponseDTO;
+import com.jon.hyf_blog.comment.commentDTO.CommentSummaryDTO;
+import com.jon.hyf_blog.user.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +25,16 @@ public class CommentController {
     @GetMapping("/{id}")
     public CommentResponseDTO findById(@PathVariable Long id) {
         return commentService.findById(id);
+    }
+
+    @PostMapping("/{articleId}")
+    public CommentSummaryDTO insertComment(
+            @PathVariable Long articleId,
+            @Valid @RequestBody CommentRequestDTO commentRequestDTO,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        commentRequestDTO.setArticleId(articleId);
+        commentRequestDTO.setUser(currentUser);
+        return commentService.save(commentRequestDTO);
     }
 }

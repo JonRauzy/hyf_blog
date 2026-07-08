@@ -2,21 +2,16 @@ package com.jon.hyf_blog.user.userDTO;
 
 import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
-import com.jon.hyf_blog.tag.TagDTO.TagMapper;
 import com.jon.hyf_blog.user.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
-    private final TagMapper tagMapper;
     private final ArticleMapper articleMapper;
-
-    public UserMapper(TagMapper tagMapper, ArticleMapper articleMapper) {
-        this.tagMapper = tagMapper;
-        this.articleMapper = articleMapper;
-    }
 
     public User toEntity(RegisterRequestDTO registerRequestDTO) {
         User user = new User();
@@ -52,5 +47,4 @@ public class UserMapper {
 
         return dto;
     }
-
 }
