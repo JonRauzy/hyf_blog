@@ -46,6 +46,10 @@
 ```bash
 git clone https://github.com/your-username/hyf_blog.git
 cd hyf_blog
+
+### 2⃣ Set up the DB
 copy/paste "EXAMPLE-env.properties" remove "EXAMPLE-" and paste your DB login
 We use MySQL by default, just switch with the proper Maven dependency corresponding to your DB driver 
-Enjoy
+
+### That's it
+Enjoy 
