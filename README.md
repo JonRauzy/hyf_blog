@@ -46,6 +46,7 @@
 ```bash
 git clone https://github.com/your-username/hyf_blog.git
 cd hyf_blog
+```
 
 ### 2⃣ Set up the DB
 copy/paste "EXAMPLE-env.properties" remove "EXAMPLE-" and paste your DB login
