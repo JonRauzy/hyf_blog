@@ -7,12 +7,11 @@ import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagRepository;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
-import com.jon.hyf_blog.util.exceptionHandler.NoRessourceExeption;
-import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
+import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
+import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
+import com.jon.hyf_blog.util.exceptionHandler.WrongResource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ArticleService {
     public List<ArticleResponseDTO> findAll(){
         List<Article> articleResponseDTOS = articleRepository.findAllWithAll();
         if(articleResponseDTOS.isEmpty()) {
-            throw new NoRessourceExeption(Article.class);
+            throw new NoResourceException(Article.class);
         }
         return streamDto(articleResponseDTOS);
     }
@@ -37,7 +36,7 @@ public class ArticleService {
     public List<ArticleResponseDTO> findAllWithTags(){
         List<Article> articleResponseDTOS = articleRepository.findAllWithTags();
         if(articleResponseDTOS.isEmpty()) {
-            throw new NoRessourceExeption(Article.class);
+            throw new NoResourceException(Article.class);
         }
         return streamDto(articleResponseDTOS);
     }
@@ -45,20 +44,20 @@ public class ArticleService {
     public List<ArticleResponseDTO> findAllWithComments() {
         List<Article> articleResponseDTOS = articleRepository.findAllWithComments();
         if(articleResponseDTOS.isEmpty()) {
-            throw new NoRessourceExeption(Article.class);
+            throw new NoResourceException(Article.class);
         }
         return streamDto(articleResponseDTOS);
     }
 
     public Article findById(Long id){
         return articleRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
     }
 
     public ArticleResponseDTO findByIdWithTags(Long id){
         Article articleResponseDTO = articleRepository.findByIdWithTags(id);
         if(articleResponseDTO == null) {
-            throw new RessourceNotFoundExeption(Article.class, id);
+            throw new ResourceNotFoundException(Article.class, id);
         }
         return articleMapper.toDto(articleResponseDTO);
     }
@@ -72,22 +71,19 @@ public class ArticleService {
 
     public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO, User currentUser) {
         Article existingArticle = articleRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
 
         Set<Tag> tags = new HashSet<>();
         if (articleRequestDTO.getTagIds() != null) {
             for (Long tagId : articleRequestDTO.getTagIds()) {
                 Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new RessourceNotFoundExeption(Tag.class, tagId));
+                        .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
                 tags.add(tag);
             }
         }
 
         if(!existingArticle.getUser().getId().equals(currentUser.getId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "You can only edit your own article"
-            );
+            throw new WrongResource(User.class);
         }
 
         existingArticle.setTitle(articleRequestDTO.getTitle());
@@ -100,7 +96,7 @@ public class ArticleService {
 
     public void delete(Long id) {
         Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, id));
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
         articleRepository.deleteById(article.getId());
     }
 

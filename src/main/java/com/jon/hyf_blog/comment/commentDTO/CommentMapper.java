@@ -1,6 +1,5 @@
 package com.jon.hyf_blog.comment.commentDTO;
 
-import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.article.ArticleRepository;
 import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
 import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
@@ -9,7 +8,6 @@ import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.user.userDTO.UserMapper;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
-import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -54,19 +52,7 @@ public class CommentMapper {
 
     public Comment toEntity(CommentRequestDTO commentRequestDTO) {
         Comment comment = new Comment();
-        Long articleId = commentRequestDTO.getArticleId();
-        User user = commentRequestDTO.getUser();
-
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new RessourceNotFoundExeption(Article.class, articleId));
-        if(user == null) {
-            throw new RessourceNotFoundExeption(User.class, 0L);
-        }
-
         comment.setBody(commentRequestDTO.getBody());
-        comment.setArticle(article);
-        comment.setUser(user);
-
         return comment;
     }
 }

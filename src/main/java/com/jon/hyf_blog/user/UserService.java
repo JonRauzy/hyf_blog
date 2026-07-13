@@ -1,8 +1,8 @@
 package com.jon.hyf_blog.user;
 
 import com.jon.hyf_blog.user.userDTO.*;
-import com.jon.hyf_blog.util.exceptionHandler.RessourceExist;
-import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
+import com.jon.hyf_blog.util.exceptionHandler.ResourceExist;
+import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
 import com.jon.hyf_blog.util.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,14 +38,14 @@ public class UserService {
 
     public UserSummaryDTO findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RessourceNotFoundExeption(User.class, id));
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, id));
 
         return mapper.toSummaryDTO(user);
     }
 
     public UserSummaryDTO register(RegisterRequestDTO registerRequestDTO) {
         if(userRepository.existsByEmail(registerRequestDTO.getEmail())){
-            throw new RessourceExist(User.class);
+            throw new ResourceExist(User.class);
         }
 
         String hashedPassword = passwordEncoder.encode(registerRequestDTO.getPassword());

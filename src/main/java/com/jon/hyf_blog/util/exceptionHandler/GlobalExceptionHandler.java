@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +19,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 
-    @ExceptionHandler(RessourceNotFoundExeption.class)
-    public ResponseEntity<ErrorResponse> handleArticleNotFound(RessourceNotFoundExeption ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleArticleNotFound(ResourceNotFoundException ex) {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(NoRessourceExeption.class)
-    public ResponseEntity<ErrorResponse> handleNoArticle(NoRessourceExeption ex) {
+    @ExceptionHandler(NoResourceException.class)
+    public ResponseEntity<ErrorResponse> handleNoArticle(NoResourceException ex) {
         return buildErrorResponse(ex, HttpStatus.NO_CONTENT);
     }
 
@@ -37,5 +38,10 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(WrongResource.class)
+    public ResponseEntity<ErrorResponse> handleWrongRessource(WrongResource ex) {
+        return buildErrorResponse(ex, HttpStatus.FORBIDDEN);
     }
 }

@@ -35,3 +35,4 @@ build/
 ### MINE ###
 env.properties
 src/main/resources/sql
+_data

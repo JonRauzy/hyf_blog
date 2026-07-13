@@ -8,8 +8,8 @@ import com.jon.hyf_blog.tag.TagRepository;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
-import com.jon.hyf_blog.util.exceptionHandler.NoRessourceExeption;
-import com.jon.hyf_blog.util.exceptionHandler.RessourceNotFoundExeption;
+import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
+import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -80,12 +80,12 @@ public class ArticleMapper {
         article.setBody(articleRequestDTO.getBody());
 
         if (articleRequestDTO.getTagIds() == null) {
-            throw new NoRessourceExeption(Tag.class);
+            throw new NoResourceException(Tag.class);
         }
 
         for (Long tagId : articleRequestDTO.getTagIds()) {
             Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new RessourceNotFoundExeption(Tag.class, tagId));
+                    .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
             tags.add(tag);
         }
 

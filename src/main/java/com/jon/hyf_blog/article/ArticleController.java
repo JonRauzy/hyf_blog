@@ -9,7 +9,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/articles")
@@ -46,8 +45,8 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        articleService.delete(id);
-        return "Article with id : " + id + " deleted";
+    public String delete(@PathVariable Long articleId) {
+        articleService.delete(articleId);
+        return "Article with id : " + articleId + " deleted";
     }
 }
