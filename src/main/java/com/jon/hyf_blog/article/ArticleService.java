@@ -36,6 +36,7 @@ public class ArticleService {
     public List<ArticleResponseDTO> findAllWithTags(){
         List<Article> articleResponseDTOS = articleRepository.findAllWithTags();
         if(articleResponseDTOS.isEmpty()) {
+
             throw new NoResourceException(Article.class);
         }
         return streamDto(articleResponseDTOS);
@@ -49,16 +50,21 @@ public class ArticleService {
         return streamDto(articleResponseDTOS);
     }
 
-    public Article findById(Long articleId){
-        return articleRepository.findById(articleId)
+    public ArticleResponseDTO findByIdWithAll(Long articleId){
+        Article article = articleRepository.findByIdWithAll(articleId)
                 .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
+        return articleMapper.toDto(article);
     }
 
     public ArticleResponseDTO findByIdWithTags(Long articleId){
-        Article articleResponseDTO = articleRepository.findByIdWithTags(articleId);
-        if(articleResponseDTO == null) {
-            throw new ResourceNotFoundException(Article.class, articleId);
-        }
+        Article articleResponseDTO = articleRepository.findByIdWithTags(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
+        return articleMapper.toDto(articleResponseDTO);
+    }
+
+    public ArticleResponseDTO findByIdWithComments(Long articleId) {
+        Article articleResponseDTO = articleRepository.findByIdWithComments(articleId)
+                .orElseThrow(()-> new ResourceNotFoundException(Article.class, articleId));
         return articleMapper.toDto(articleResponseDTO);
     }
 

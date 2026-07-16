@@ -12,16 +12,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegisterRequestDTO {
-    @NotBlank(message = "userNameMissing")
+    @NotBlank
     private String userName;
 
-    @NotBlank(message = "emailMissing")
-    @Email(message = "notAnEmail")
+    @NotBlank
+    @Email
     private String email;
 
-    @NotBlank(message = "passwordMissing")
+    @NotBlank
     private String password;
 
-    @NotNull(message = "roleMissing")
+    @NotNull
     private Role role;
 }

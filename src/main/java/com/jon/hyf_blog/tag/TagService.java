@@ -43,10 +43,8 @@ public class TagService {
     }
 
     public TagResponseDTO findByIdWithArticle(Long tagId) {
-        Tag tag = tagRepository.findByIdWithArticle(tagId);
-        if(tag == null) {
-            throw new ResourceNotFoundException(Tag.class, tagId);
-        }
+        Tag tag = tagRepository.findByIdWithArticle(tagId).
+                orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
         return mapper.toDto(tag);
     }
 

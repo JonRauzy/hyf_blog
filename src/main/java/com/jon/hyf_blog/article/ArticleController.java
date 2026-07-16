@@ -24,7 +24,7 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public ArticleResponseDTO findById(@PathVariable Long articleId){
-        return articleService.findByIdWithTags(articleId);
+        return articleService.findByIdWithAll(articleId);
     }
 
     @PostMapping

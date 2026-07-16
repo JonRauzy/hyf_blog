@@ -3,6 +3,8 @@ package com.jon.hyf_blog.comment;
 import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +20,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String body;
 
     @CreationTimestamp
@@ -30,6 +33,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
     @ManyToOne

@@ -1,6 +1,6 @@
 package com.jon.hyf_blog.user;
 
-import com.jon.hyf_blog.article.Article;
+ import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.comment.Comment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,8 +12,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,6 +28,7 @@ public class User {
     private String userName;
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank
@@ -45,9 +46,9 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
-    private List<Article> articles = new ArrayList<>();
+    private Set<Article> articles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 }
 

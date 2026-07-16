@@ -33,43 +33,40 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            //tell which endpoints need to have which authorization (roles)
-            //which endpoints are OK to be reached even without authentiaction etc.
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
-                    auth
-                            .requestMatchers("/api/v1/auth/**").permitAll()
-                            .requestMatchers("/swagger-ui/**").hasAuthority("ADMIN") //TODO make it admin or user
-                            .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
-                            .requestMatchers(HttpMethod.PATCH, "/api/v1/articles/**").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "/api/v1/tags").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/tags/with-articles").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/tags/{tagId}").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/v1/tags/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/tags/**").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.PATCH, "/api/v1/tags/**").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/tags/**").hasAuthority("ADMIN")
-                            .requestMatchers(HttpMethod.GET, "/api/v1/comments").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/v1/comments/{commentId}").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
-                            .requestMatchers(HttpMethod.PUT, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
-                            .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}/comments/{commentId}").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                        auth
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").hasAuthority("ADMIN") //TODO make it admin or user
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/articles/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags/with-articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags/{tagId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/tags/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/comments").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/comments/{commentId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}/comments/{commentId}").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
                     )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
-
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 }

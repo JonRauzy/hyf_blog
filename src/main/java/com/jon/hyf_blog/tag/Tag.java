@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,5 +22,5 @@ public class Tag {
     private String tagName;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Article> articles = new ArrayList<>();
+    private Set<Article> articles = new HashSet<>();
 }

@@ -6,8 +6,11 @@ import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
 import com.jon.hyf_blog.util.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -59,7 +62,7 @@ public class UserService {
                 .orElseThrow(()-> new RuntimeException("Nope"));
 
         if(!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())){
-            throw new RuntimeException("Nope");
+            throw new RuntimeException("Nope"); // TODO : exception
         }
 
         Map<String, Object> claims = Map.of(
@@ -70,4 +73,6 @@ public class UserService {
         String token = jwtUtils.generateToken(user.getEmail(), claims);
         return new LoginResponseDTO(token);
     }
+
+
 }
