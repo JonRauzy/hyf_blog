@@ -39,7 +39,7 @@
 
 ### Prerequisites
 - [JDK 25](https://openjdk.org/projects/jdk/25/)
-- [MySQL 8+](https://dev.mysql.com/downloads/) (or Docker)
+- [MySQL 8+](https://dev.mysql.com/downloads/)
 - [Maven 3.6+](https://maven.apache.org/)
 
 ### 1️⃣ Clone the Repository

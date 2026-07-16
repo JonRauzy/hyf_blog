@@ -36,9 +36,9 @@ public class UserService {
                 .toList();
     }
 
-    public UserSummaryDTO findById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(User.class, id));
+    public UserSummaryDTO findById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
 
         return mapper.toSummaryDTO(user);
     }

@@ -22,9 +22,9 @@ public class ArticleController {
         return articleService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ArticleResponseDTO findById(@PathVariable Long id){
-        return articleService.findByIdWithTags(id);
+    @GetMapping("/{articleId}")
+    public ArticleResponseDTO findById(@PathVariable Long articleId){
+        return articleService.findByIdWithTags(articleId);
     }
 
     @PostMapping
@@ -35,18 +35,21 @@ public class ArticleController {
         return articleService.save(articleRequestDTO, currentUser);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{articleId}")
     public ArticleResponseDTO update(
-            @PathVariable Long id,
+            @PathVariable Long articleId,
             @Valid @RequestBody ArticleRequestDTO articleRequestDTO,
             @AuthenticationPrincipal User currentUser
     ) {
-        return articleService.update(id, articleRequestDTO, currentUser);
+        return articleService.update(articleId, articleRequestDTO, currentUser);
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long articleId) {
-        articleService.delete(articleId);
+    @DeleteMapping("/{articleId}")
+    public String delete(
+            @PathVariable Long articleId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        articleService.delete(articleId, currentUser);
         return "Article with id : " + articleId + " deleted";
     }
 }

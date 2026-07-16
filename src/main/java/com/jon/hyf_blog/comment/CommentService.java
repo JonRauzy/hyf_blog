@@ -40,9 +40,9 @@ public class CommentService {
                 .toList();
     }
 
-    public CommentResponseDTO findById(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Comment.class, id));
+    public CommentResponseDTO findById(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException(Comment.class, commentId));
 
         return commentMapper.toDto(comment);
     }

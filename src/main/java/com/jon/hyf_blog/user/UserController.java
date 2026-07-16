@@ -25,9 +25,9 @@ public class UserController {
         return userService.findAllWithArticles();
     }
 
-    @GetMapping("/{id}")
-    public UserSummaryDTO findById(@PathVariable Long id){
-        return userService.findById(id);
+    @GetMapping("/{userId}")
+    public UserSummaryDTO findById(@PathVariable Long userId){
+        return userService.findById(userId);
     }
 
     @PostMapping("/register")

@@ -42,10 +42,10 @@ public class TagService {
                 .toList();
     }
 
-    public TagResponseDTO findByIdWithArticle(Long id) {
-        Tag tag = tagRepository.findByIdWithArticle(id);
+    public TagResponseDTO findByIdWithArticle(Long tagId) {
+        Tag tag = tagRepository.findByIdWithArticle(tagId);
         if(tag == null) {
-            throw new ResourceNotFoundException(Tag.class, id);
+            throw new ResourceNotFoundException(Tag.class, tagId);
         }
         return mapper.toDto(tag);
     }
@@ -56,9 +56,9 @@ public class TagService {
         return new TagSummaryDTO(savedTag.getId(), savedTag.getTagName());
     }
 
-    public TagSummaryDTO update(Long id, TagRequestDTO tagRequestDTO) {
-        Tag existingTag = tagRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Tag.class, id));
+    public TagSummaryDTO update(Long tagId, TagRequestDTO tagRequestDTO) {
+        Tag existingTag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
 
         existingTag.setTagName(tagRequestDTO.getTagName());
         Tag updatedTag = tagRepository.save(existingTag);
@@ -66,9 +66,9 @@ public class TagService {
         return new TagSummaryDTO(updatedTag.getId(), updatedTag.getTagName());
     }
 
-    public void delete(Long id) {
-        Tag existingTag = tagRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Tag.class, id));
+    public void delete(Long tagId) {
+        Tag existingTag = tagRepository.findById(tagId)
+                .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
         tagRepository.deleteById(existingTag.getId());
     }
 }

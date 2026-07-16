@@ -34,6 +34,11 @@ public class CommentController {
 //        return commentService.findAllByArticle();
 //    }
 
+//    @GetMapping("/article/{articleId}/comments/{commentId}")
+//    public List<CommentResponseDTO> findByIdByArticle(@PathVariable Long articleId){
+//        return commentService.findAllByArticle();
+//    }
+
     @PostMapping("/articles/{articleId}/comments")
     public CommentSummaryDTO insertComment(
             @PathVariable Long articleId,
@@ -59,7 +64,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @PathVariable Long articleId,
             @AuthenticationPrincipal User currentUser
-    ) throws AccessDeniedException {
+    ) {
         commentService.delete(commentId, articleId, currentUser);
         return ResponseEntity.ok("Comment id : " + commentId + " is deleted");
     }

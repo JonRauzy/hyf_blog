@@ -9,6 +9,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +27,14 @@ public class Article {
     @Column(nullable = false)
     @NotBlank
     private String title;
+
+    @CreationTimestamp
+    @Column(name="CREATED_AT", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name="UPDATED_AT", insertable = false)
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank

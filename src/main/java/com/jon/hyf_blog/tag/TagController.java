@@ -25,9 +25,9 @@ public class TagController {
         return tagService.findAllWithArticle();
     }
 
-    @GetMapping("/{id}")
-    public TagResponseDTO findByIdWithArticle(@PathVariable Long id) {
-        return tagService.findByIdWithArticle(id);
+    @GetMapping("/{tagId}")
+    public TagResponseDTO findByIdWithArticle(@PathVariable Long tagId) {
+        return tagService.findByIdWithArticle(tagId);
     }
 
     @PostMapping
@@ -35,17 +35,17 @@ public class TagController {
         return tagService.save(tagRequestDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{tagId}")
     public TagSummaryDTO update(
-            @PathVariable Long id,
+            @PathVariable Long tagId,
             @Valid @RequestBody TagRequestDTO tagRequestDTO
     ) {
-        return tagService.update(id, tagRequestDTO);
+        return tagService.update(tagId, tagRequestDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        tagService.delete(id);
-        return "Tag id : " + id + " has been deleted";
+    @DeleteMapping("/{tagId}")
+    public String delete(@PathVariable Long tagId) {
+        tagService.delete(tagId);
+        return "Tag id : " + tagId + " has been deleted";
     }
 }

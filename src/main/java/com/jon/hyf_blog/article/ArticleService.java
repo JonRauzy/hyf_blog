@@ -49,15 +49,15 @@ public class ArticleService {
         return streamDto(articleResponseDTOS);
     }
 
-    public Article findById(Long id){
-        return articleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
+    public Article findById(Long articleId){
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
     }
 
-    public ArticleResponseDTO findByIdWithTags(Long id){
-        Article articleResponseDTO = articleRepository.findByIdWithTags(id);
+    public ArticleResponseDTO findByIdWithTags(Long articleId){
+        Article articleResponseDTO = articleRepository.findByIdWithTags(articleId);
         if(articleResponseDTO == null) {
-            throw new ResourceNotFoundException(Article.class, id);
+            throw new ResourceNotFoundException(Article.class, articleId);
         }
         return articleMapper.toDto(articleResponseDTO);
     }
@@ -69,9 +69,9 @@ public class ArticleService {
         return articleMapper.toDto(savedArticle);
     }
 
-    public ArticleResponseDTO update(Long id, ArticleRequestDTO articleRequestDTO, User currentUser) {
-        Article existingArticle = articleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
+    public ArticleResponseDTO update(Long articleId, ArticleRequestDTO articleRequestDTO, User currentUser) {
+        Article existingArticle = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
 
         Set<Tag> tags = new HashSet<>();
         if (articleRequestDTO.getTagIds() != null) {
@@ -94,9 +94,14 @@ public class ArticleService {
         return articleMapper.toDto(updatedArticle);
     }
 
-    public void delete(Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(Article.class, id));
+    public void delete(Long articleId, User currentUser) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
+
+        if(!article.getUser().getId().equals(currentUser.getId())) {
+            throw new WrongResource(User.class);
+        }
+
         articleRepository.deleteById(article.getId());
     }
 

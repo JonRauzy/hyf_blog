@@ -5,6 +5,8 @@ import com.jon.hyf_blog.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +20,13 @@ public class Comment {
 
     private String body;
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name="CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name="UPDATED_AT", insertable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
