@@ -15,13 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// TODO : JWT js script in PostMan to keep token in memory
-
 @Configuration
 @EnableWebSecurity  // This annotation is for enabling Spring Security's web security support and provides the Spring MVC integration.
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final JwtAuthenticationFilter jwtFilter;
     private final LoggingFilter loggingFilter;
 
@@ -43,9 +40,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
