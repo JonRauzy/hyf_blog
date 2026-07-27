@@ -35,16 +35,17 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->
                         auth
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").hasAuthority("ADMIN") //TODO make it admin or user
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
+//                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")

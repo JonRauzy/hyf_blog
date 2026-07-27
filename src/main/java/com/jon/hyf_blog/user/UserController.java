@@ -4,6 +4,7 @@ import com.jon.hyf_blog.user.userDTO.*;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +39,14 @@ public class UserController {
     @PostMapping("/login")
     public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
         return userService.login(loginRequestDTO);
+    }
+
+    @PutMapping("/{userId}")
+    public UserSummaryDTO updateUser(
+            @PathVariable Long userId,
+            @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return userService.updateUser(userId, updateUserRequestDTO, currentUser);
     }
 }

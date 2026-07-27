@@ -3,6 +3,7 @@ package com.jon.hyf_blog.user;
 import com.jon.hyf_blog.user.userDTO.*;
 import com.jon.hyf_blog.util.exceptionHandler.ResourceExist;
 import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
+import com.jon.hyf_blog.util.exceptionHandler.WrongResource;
 import com.jon.hyf_blog.util.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,7 +51,7 @@ public class UserService {
 
         String hashedPassword = passwordEncoder.encode(registerRequestDTO.getPassword());
         registerRequestDTO.setPassword(hashedPassword);
-        User user = userRepository.save(mapper.toEntity(registerRequestDTO));
+        User user = userRepository.save(mapper.registerToEntity(registerRequestDTO));
         return mapper.toSummaryDTO(user);
     }
 
@@ -71,4 +72,15 @@ public class UserService {
         return new LoginResponseDTO(token);
     }
 
+    public LoginResponseDTO logout() {
+        return new LoginResponseDTO("");
+    }
+
+    public UserSummaryDTO updateUser(Long userId, UpdateUserRequestDTO updateUserRequestDTO, User currentUser) {
+        if(!userId.equals(currentUser.getId())) {
+            throw new WrongResource(User.class);
+        }
+        User user = userRepository.save(mapper.toUpdateEntity(updateUserRequestDTO));
+        return mapper.toSummaryDTO(user);
+    }
 }

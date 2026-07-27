@@ -13,14 +13,20 @@ import java.util.List;
 public class UserMapper {
     private final ArticleMapper articleMapper;
 
-    public User toEntity(RegisterRequestDTO registerRequestDTO) {
+    public User registerToEntity(RegisterRequestDTO registerRequestDTO) {
         User user = new User();
-
         user.setUserName(registerRequestDTO.getUserName());
         user.setEmail(registerRequestDTO.getEmail());
         user.setPassword(registerRequestDTO.getPassword());
         user.setRole(registerRequestDTO.getRole());
+        return user;
+    }
 
+    public User toUpdateEntity(UpdateUserRequestDTO updateUserRequestDTO) {
+        User user = new User();
+        user.setUserName(updateUserRequestDTO.getUserName());
+        user.setEmail(updateUserRequestDTO.getEmail());
+        user.setRole(updateUserRequestDTO.getRole());
         return user;
     }
 
