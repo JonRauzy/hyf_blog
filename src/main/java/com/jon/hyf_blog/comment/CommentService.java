@@ -47,7 +47,7 @@ public class CommentService {
         return commentMapper.toDto(comment);
     }
 
-    public CommentSummaryDTO save(
+    public CommentResponseDTO save(
                 CommentRequestDTO commentRequestDTO,
                 Long articleId,
                 User currentUser
@@ -64,15 +64,16 @@ public class CommentService {
         UserSummaryDTO userSummaryDTO = userMapper.toSummaryDTO(savedComment.getUser());
         ArticleSummaryDTO articleSummaryDTO = articleMapper.toArticleSummaryDto(savedComment.getArticle());
 
-        return new CommentSummaryDTO(
+        return new CommentResponseDTO(
                 savedComment.getId(),
                 savedComment.getBody(),
-                articleSummaryDTO,
-                userSummaryDTO
+                savedComment.getCreatedAt(),
+                userSummaryDTO,
+                articleSummaryDTO
         );
     }
 
-    public CommentSummaryDTO update(
+    public CommentResponseDTO update(
             CommentRequestDTO commentRequestDTO,
             Long commentId,
             Long articleId,
@@ -93,7 +94,7 @@ public class CommentService {
         existingComment.setBody(commentRequestDTO.getBody());
 
         Comment updatedComment = commentRepository.save(existingComment);
-        return commentMapper.toSummaryDto(updatedComment);
+        return commentMapper.toDto(updatedComment);
     }
 
     public void delete(

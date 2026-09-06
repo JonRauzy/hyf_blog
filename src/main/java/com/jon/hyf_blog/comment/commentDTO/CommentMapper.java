@@ -45,8 +45,8 @@ public class CommentMapper {
         return new CommentSummaryDTO(
                 comment.getId(),
                 comment.getBody(),
-                articleSummaryDTO,
-                userSummaryDTO
+                userSummaryDTO,
+                comment.getCreatedAt()
         );
     }
 

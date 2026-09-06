@@ -41,6 +41,11 @@ public class UserController {
         return userService.login(loginRequestDTO);
     }
 
+//    @PostMapping("/logout")
+//    public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+//        return userService.logout(loginRequestDTO);
+//    }
+
     @PutMapping("/{userId}")
     public UserSummaryDTO updateUser(
             @PathVariable Long userId,

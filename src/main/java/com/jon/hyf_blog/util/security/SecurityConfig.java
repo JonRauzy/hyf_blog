@@ -2,6 +2,7 @@ package com.jon.hyf_blog.util.security;
 
 import com.jon.hyf_blog.util.filters.JwtAuthenticationFilter;
 import com.jon.hyf_blog.util.filters.LoggingFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtFilter;
     private final LoggingFilter loggingFilter;
+    private final JwtLogoutHandler jwtLogoutHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,19 +35,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth->
+                .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/users").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAnyAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/logout").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
-//                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
@@ -63,7 +65,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}/comments/{commentId}").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
-                    )
+                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
         return http.build();

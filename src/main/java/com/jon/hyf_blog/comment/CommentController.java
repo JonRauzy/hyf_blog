@@ -39,7 +39,7 @@ public class CommentController {
 //    }
 
     @PostMapping("/articles/{articleId}/comments")
-    public CommentSummaryDTO insertComment(
+    public CommentResponseDTO insertComment(
             @PathVariable Long articleId,
             @Valid @RequestBody CommentRequestDTO commentRequestDTO,
             @AuthenticationPrincipal User currentUser
@@ -48,7 +48,7 @@ public class CommentController {
     }
 
     @PutMapping("/articles/{articleId}/comments/{commentId}")
-    public CommentSummaryDTO updateComment(
+    public CommentResponseDTO updateComment(
             @PathVariable Long commentId,
             @PathVariable Long articleId,
             @Valid @RequestBody CommentRequestDTO commentRequestDTO,

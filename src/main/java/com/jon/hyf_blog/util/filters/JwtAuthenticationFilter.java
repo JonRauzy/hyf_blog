@@ -2,12 +2,14 @@ package com.jon.hyf_blog.util.filters;
 
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
+import com.jon.hyf_blog.util.security.JwtLogoutHandler;
 import com.jon.hyf_blog.util.security.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,9 +25,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // implement
 
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
+    private final JwtLogoutHandler jwtLogoutHandler;
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    public void doFilterInternal(
+            HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
 
 //  public void doFilter(ServletRequest req, ServletResponse response,  FilterChain chain) throws ServletException, IOException {
 //        HttpServletRequest request = (HttpServletRequest) req;
@@ -35,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // implement
         if(header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            if(jwtUtils.isValid(token)) {
+            if(jwtUtils.isValid(token) && !jwtLogoutHandler.isTokenBlacklisted(token)) {
                 String email = jwtUtils.getSubject(token);
                 User user = userRepository.findByEmail(email).orElse(null);
 

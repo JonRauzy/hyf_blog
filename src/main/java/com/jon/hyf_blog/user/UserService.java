@@ -72,10 +72,6 @@ public class UserService {
         return new LoginResponseDTO(token);
     }
 
-    public LoginResponseDTO logout() {
-        return new LoginResponseDTO("");
-    }
-
     public UserSummaryDTO updateUser(Long userId, UpdateUserRequestDTO updateUserRequestDTO, User currentUser) {
         if(!userId.equals(currentUser.getId())) {
             throw new WrongResource(User.class);

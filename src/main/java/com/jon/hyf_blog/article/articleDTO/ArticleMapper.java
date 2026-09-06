@@ -6,7 +6,6 @@ import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
 import com.jon.hyf_blog.tag.TagRepository;
 import com.jon.hyf_blog.user.User;
-import com.jon.hyf_blog.user.UserRepository;
 import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
 import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
 import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
@@ -22,15 +21,13 @@ import java.util.Set;
 public class ArticleMapper {
 
     private final TagRepository tagRepository;
-    private final UserRepository userRepository;
 
     public ArticleResponseDTO toDto(Article article) {
         List<TagSummaryDTO> tagDtos = article.getTags()
                 .stream()
                 .map(tag -> new TagSummaryDTO(tag.getId(), tag.getTagName()))
                 .toList();
-
-        User user = article.getUser();
+        
         UserSummaryDTO userDTO = new UserSummaryDTO(
                 article.getUser().getId(),
                 article.getUser().getUserName(),
@@ -40,18 +37,14 @@ public class ArticleMapper {
         List<CommentSummaryDTO> commentDTO = article.getComments()
                 .stream()
                 .map(comment -> new CommentSummaryDTO(
-                                        comment.getId(),
-                                        comment.getBody(),
-                        new ArticleSummaryDTO(
-                                                comment.getArticle().getId(),
-                                                comment.getArticle().getTitle()
-                                        ),
+                        comment.getId(),
+                        comment.getBody(),
                         new UserSummaryDTO(
-                                                comment.getUser().getId(),
-                                                comment.getUser().getUserName(),
-                                                comment.getUser().getRole()
-                                        )
-                                    )
+                                comment.getUser().getId(),
+                                comment.getUser().getUserName(),
+                                comment.getUser().getRole()),
+                        comment.getCreatedAt()
+                        )
                 )
                 .toList();
 
