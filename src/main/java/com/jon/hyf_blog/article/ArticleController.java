@@ -1,7 +1,7 @@
 package com.jon.hyf_blog.article;
 
-import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
-import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.article.dto.ArticleRequestDTO;
+import com.jon.hyf_blog.article.dto.ArticleResponseDTO;
 import com.jon.hyf_blog.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

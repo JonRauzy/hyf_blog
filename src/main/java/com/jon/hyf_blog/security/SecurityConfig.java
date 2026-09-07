@@ -1,0 +1,72 @@
+package com.jon.hyf_blog.security;
+
+import com.jon.hyf_blog.security.filters.JwtAuthenticationFilter;
+import com.jon.hyf_blog.security.filters.LoggingFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity  // This annotation is for enabling Spring Security's web security support and provides the Spring MVC integration.
+@RequiredArgsConstructor
+public class SecurityConfig {
+    private final JwtAuthenticationFilter jwtFilter;
+    private final LoggingFilter loggingFilter;
+    private final JwtLogoutHandler jwtLogoutHandler;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAnyAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/with-articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/{userId}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/logout").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/articles/{articleId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/articles/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/articles/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags/with-articles").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/tags/{tagId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/tags/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/tags/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/comments").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/comments/{commentId}").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/articles/{articleId}/comments/**").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/articles/{articleId}/comments/{commentId}").hasAnyAuthority("ADMIN", "CONTRIBUTOR", "USER")
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(loggingFilter, JwtAuthenticationFilter.class);
+        return http.build();
+    }
+}

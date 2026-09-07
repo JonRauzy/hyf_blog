@@ -2,18 +2,17 @@ package com.jon.hyf_blog.comment;
 
 import com.jon.hyf_blog.article.Article;
 import com.jon.hyf_blog.article.ArticleRepository;
-import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
-import com.jon.hyf_blog.article.articleDTO.ArticleSummaryDTO;
-import com.jon.hyf_blog.comment.commentDTO.CommentMapper;
-import com.jon.hyf_blog.comment.commentDTO.CommentRequestDTO;
-import com.jon.hyf_blog.comment.commentDTO.CommentResponseDTO;
-import com.jon.hyf_blog.comment.commentDTO.CommentSummaryDTO;
+import com.jon.hyf_blog.article.dto.ArticleMapper;
+import com.jon.hyf_blog.article.dto.ArticleSummaryDTO;
+import com.jon.hyf_blog.comment.dto.CommentMapper;
+import com.jon.hyf_blog.comment.dto.CommentRequestDTO;
+import com.jon.hyf_blog.comment.dto.CommentResponseDTO;
 import com.jon.hyf_blog.user.User;
-import com.jon.hyf_blog.user.userDTO.UserMapper;
-import com.jon.hyf_blog.user.userDTO.UserSummaryDTO;
-import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
-import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
-import com.jon.hyf_blog.util.exceptionHandler.WrongResource;
+import com.jon.hyf_blog.user.dto.UserMapper;
+import com.jon.hyf_blog.user.dto.UserSummaryDTO;
+import com.jon.hyf_blog.exception.NoResourceException;
+import com.jon.hyf_blog.exception.ResourceNotFoundException;
+import com.jon.hyf_blog.exception.WrongResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

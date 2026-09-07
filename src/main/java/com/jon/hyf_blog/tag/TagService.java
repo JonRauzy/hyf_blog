@@ -1,11 +1,11 @@
 package com.jon.hyf_blog.tag;
 
-import com.jon.hyf_blog.tag.TagDTO.TagMapper;
-import com.jon.hyf_blog.tag.TagDTO.TagRequestDTO;
-import com.jon.hyf_blog.tag.TagDTO.TagResponseDTO;
-import com.jon.hyf_blog.tag.TagDTO.TagSummaryDTO;
-import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
-import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
+import com.jon.hyf_blog.tag.dto.TagMapper;
+import com.jon.hyf_blog.tag.dto.TagRequestDTO;
+import com.jon.hyf_blog.tag.dto.TagResponseDTO;
+import com.jon.hyf_blog.tag.dto.TagSummaryDTO;
+import com.jon.hyf_blog.exception.NoResourceException;
+import com.jon.hyf_blog.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

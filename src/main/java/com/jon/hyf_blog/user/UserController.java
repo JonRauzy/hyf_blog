@@ -1,6 +1,6 @@
 package com.jon.hyf_blog.user;
 
-import com.jon.hyf_blog.user.userDTO.*;
+import com.jon.hyf_blog.user.dto.*;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,10 @@
 package com.jon.hyf_blog.user;
 
-import com.jon.hyf_blog.user.userDTO.*;
-import com.jon.hyf_blog.util.exceptionHandler.ResourceExist;
-import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
-import com.jon.hyf_blog.util.exceptionHandler.WrongResource;
-import com.jon.hyf_blog.util.security.JwtUtils;
+import com.jon.hyf_blog.user.dto.*;
+import com.jon.hyf_blog.exception.ResourceExist;
+import com.jon.hyf_blog.exception.ResourceNotFoundException;
+import com.jon.hyf_blog.exception.WrongResource;
+import com.jon.hyf_blog.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;

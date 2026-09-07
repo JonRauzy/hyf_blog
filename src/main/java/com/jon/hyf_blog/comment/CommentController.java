@@ -1,8 +1,7 @@
 package com.jon.hyf_blog.comment;
 
-import com.jon.hyf_blog.comment.commentDTO.CommentRequestDTO;
-import com.jon.hyf_blog.comment.commentDTO.CommentResponseDTO;
-import com.jon.hyf_blog.comment.commentDTO.CommentSummaryDTO;
+import com.jon.hyf_blog.comment.dto.CommentRequestDTO;
+import com.jon.hyf_blog.comment.dto.CommentResponseDTO;
 import com.jon.hyf_blog.user.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

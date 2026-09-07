@@ -1,21 +1,22 @@
 package com.jon.hyf_blog.article;
 
-import com.jon.hyf_blog.article.articleDTO.ArticleMapper;
-import com.jon.hyf_blog.article.articleDTO.ArticleRequestDTO;
-import com.jon.hyf_blog.article.articleDTO.ArticleResponseDTO;
+import com.jon.hyf_blog.article.dto.ArticleMapper;
+import com.jon.hyf_blog.article.dto.ArticleRequestDTO;
+import com.jon.hyf_blog.article.dto.ArticleResponseDTO;
 import com.jon.hyf_blog.tag.Tag;
 import com.jon.hyf_blog.tag.TagRepository;
 import com.jon.hyf_blog.user.User;
 import com.jon.hyf_blog.user.UserRepository;
-import com.jon.hyf_blog.util.exceptionHandler.NoResourceException;
-import com.jon.hyf_blog.util.exceptionHandler.ResourceNotFoundException;
-import com.jon.hyf_blog.util.exceptionHandler.WrongResource;
+import com.jon.hyf_blog.exception.NoResourceException;
+import com.jon.hyf_blog.exception.ResourceNotFoundException;
+import com.jon.hyf_blog.exception.WrongResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,13 +81,15 @@ public class ArticleService {
                 .orElseThrow(() -> new ResourceNotFoundException(Article.class, articleId));
 
         Set<Tag> tags = new HashSet<>();
+
         if (articleRequestDTO.getTagIds() != null) {
-            for (Long tagId : articleRequestDTO.getTagIds()) {
-                Tag tag = tagRepository.findById(tagId)
-                        .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId));
-                tags.add(tag);
-            }
+            tags = articleRequestDTO.getTagIds()
+                    .stream()
+                    .map(tagId-> tagRepository.findById(tagId)
+                            .orElseThrow(() -> new ResourceNotFoundException(Tag.class, tagId)))
+                    .collect(Collectors.toSet());
         }
+
 
         if(!existingArticle.getUser().getId().equals(currentUser.getId())) {
             throw new WrongResource(User.class);
